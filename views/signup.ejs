@@ -8,13 +8,15 @@
 <body class="quiz-bg-1">
   <div class="container">
     <h1>📝 Create Account</h1>
-    <form action="/signup" method="POST">
+    <form action="/signup" method="POST" class="form-box">
       <input type="text" name="username" placeholder="Username" required class="input"><br>
       <input type="password" name="password" placeholder="Password" required class="input"><br>
       <input type="password" name="password" placeholder="Confirm Password" required class="input">
-      <button type="submit" class="btn">Sign Up</button>
+      <div class="action-row">
+        <button type="submit" class="btn">Sign Up</button>
+        <a href="/login" class="link-btn">Login here</a>
+      </div>
     </form>
-    <p>Already registered? <a href="/login">Login here</a>.</p>
   </div>
 </body>
 </html>
