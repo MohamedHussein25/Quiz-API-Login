@@ -8,14 +8,47 @@
 <body class="quiz-bg-1">
   <div class="container">
     <h1>🔐 Login</h1>
-      <form action="/signup" method="POST" class="form-box">
-      <input type="text" name="username" autocomplete="off" placeholder="Username" required class="input"><br>
-      <input type="password" name="password" autocomplete="off" placeholder="Password" required class="input"><br>
+    <form id="login-form" class="form-box">
+      <input type="text" name="username" placeholder="Username" required class="input"><br>
+      <input type="password" name="password" placeholder="Password" required class="input"><br>
       <div class="action-row">
         <button type="submit" class="btn">Login</button>
         <a href="/signup" class="link-btn">Create an account</a>
       </div>
     </form>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("login-form");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const body = new URLSearchParams(formData);
+
+        try {
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: body
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            window.location.href = "/";
+          } else {
+            alert("❌ " + result.message);
+          }
+        } catch (err) {
+          alert("⚠️ Login failed. Please try again.");
+        }
+      });
+    });
+  </script>
 </body>
 </html>
