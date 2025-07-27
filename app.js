@@ -33,19 +33,25 @@ app.get('/signup', (req, res) => {
 app.post('/signup', async (req, res) => {
   const { username, password, confirmPassword } = req.body;
 
+  if (!username || !password || !confirmPassword) {
+    return res.status(400).json({ success: false, message: 'All fields cannot be empty' });
+  }
+
   if (password !== confirmPassword) {
-    return res.send('Passwords do not match. <a href="/signup">Try again</a>.');
+    return res.status(400).json({ success: false, message: 'Passwords do not match' });
+  }
+
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return res.status(409).json({ success: false, message: 'Username has already been registered' });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  await User.create({ username, password: hashedPassword });
 
-  try {
-    await User.create({ username, password: hashedPassword });
-    res.redirect('/login');
-  } catch (err) {
-    res.send('Username already exists. <a href="/signup">Try another</a>.');
-  }
+  return res.json({ success: true });
 });
+
 
 // Login route
 app.get('/login', (req, res) => {
@@ -57,21 +63,18 @@ app.post('/login', async (req, res) => {
 
   const user = await User.findOne({ username });
   if (!user) {
-    return res.send(`
-      <script>alert('❌ User name not exist.'); window.location.href = '/login';</script>
-    `);
+    return res.status(401).json({ success: false, message: 'User name is not exist' });
   }
 
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
-    return res.send(`
-      <script>alert('❌ Password incorrect.'); window.location.href = '/login';</script>
-    `);
+    return res.status(401).json({ success: false, message: 'Password incorrect' });
   }
 
   req.session.username = username;
-  res.redirect('/');
+  return res.json({ success: true });
 });
+
 // Logout route
 app.get('/logout', (req, res) => {
   req.session.destroy(() => {
