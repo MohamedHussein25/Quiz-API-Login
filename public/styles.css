@@ -557,4 +557,33 @@ input[type="password"] {
   border: 2px solid red;
 }
 
+.form-box {
+  max-width: 400px;
+  margin: 0 auto;
+}
 
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+input[type="text"], input[type="password"], select {
+  width: 100%;
+}
+
+.link-btn {
+  color: var(--primary-color);
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  color: var(--button-hover);
+}
+
+.link-btn{
+  color: #007BFF;
+}
