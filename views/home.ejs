@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Quiz App</title>
   <link rel="stylesheet" href="/styles.css">
-  <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
   <style>
@@ -77,7 +76,10 @@
           <option value="40">40 Questions</option>
           <option value="50">50 Questions</option>
         </select>
-        <button type="submit">Start Quiz 🚀</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+          <button type="submit" class="btn">Start Quiz 🚀</button>
+          <a href="/logout" class="logout-btn">🚪 Log out</a>
+        </div>
       </form>
     </div>
   </div>
