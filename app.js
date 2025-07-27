@@ -6,105 +6,85 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const Score = require('./models/Score');
+const leaderboardRouter = require('./routes/leaderboard');
 
 mongoose.connect('mongodb://127.0.0.1:27017/quizApp')
-  .then(() => {
-    console.log('✅ MongoDB connected');
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
-  });
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch((err) => console.error('❌ MongoDB connection error:', err));
 
 const app = express();
+
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: 'quiz_secret', resave: false, saveUninitialized: true }));
+
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-const questionsData = require('./questions.json');
-
-// Signup route
-app.get('/signup', (req, res) => {
-  res.render('signup');
-});
+// Signup
+app.get('/signup', (req, res) => res.render('signup'));
 
 app.post('/signup', async (req, res) => {
   const { username, password, confirmPassword } = req.body;
-
   if (!username || !password || !confirmPassword) {
-    return res.status(400).json({ success: false, message: 'All fields cannot be empty' });
+    return res.status(400).json({ success: false, message: 'All fields required' });
   }
-
   if (password !== confirmPassword) {
     return res.status(400).json({ success: false, message: 'Passwords do not match' });
   }
-
   const existingUser = await User.findOne({ username });
   if (existingUser) {
-    return res.status(409).json({ success: false, message: 'Username has already been registered' });
+    return res.status(409).json({ success: false, message: 'Username already taken' });
   }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  await User.create({ username, password: hashedPassword });
-
-  return res.json({ success: true });
+  const hashed = await bcrypt.hash(password, 10);
+  await User.create({ username, password: hashed });
+  res.json({ success: true });
 });
 
-
-// Login route
-app.get('/login', (req, res) => {
-  res.render('login', { error: null });
-});
+// Login
+app.get('/login', (req, res) => res.render('login', { error: null }));
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
   const user = await User.findOne({ username });
   if (!user) {
-    return res.status(401).json({ success: false, message: 'User name is not exist' });
+    return res.status(401).json({ success: false, message: 'Username not found' });
   }
-
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) {
-    return res.status(401).json({ success: false, message: 'Password incorrect' });
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) {
+    return res.status(401).json({ success: false, message: 'Invalid password' });
   }
-
   req.session.username = username;
-  return res.json({ success: true });
+  req.session.userId = user._id.toString();
+  res.json({ success: true });
 });
 
-// Logout route
+// Logout
 app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login');
-  });
+  req.session.destroy(() => res.redirect('/login'));
 });
 
-// Middleware to protect /quiz
+// Middleware
 app.use('/quiz', (req, res, next) => {
-  if (!req.session.username) {
-    return res.redirect('/login');
-  }
+  if (!req.session.username) return res.redirect('/login');
   next();
 });
 
-// Home page
+// Home
 app.get('/', (req, res) => {
-  if (!req.session.username) {
-    return res.redirect('/login');
-  }
+  if (!req.session.username) return res.redirect('/login');
   res.render('home', { darkMode: true });
 });
 
-// Start quiz
+const questionsData = require('./questions.json');
+
+// Start Quiz
 app.post('/quiz', (req, res) => {
   const name = req.body.username || req.session.username || 'Guest';
   const count = parseInt(req.body.count) || 10;
-
-  const shuffled = questionsData.sort(() => 0.5 - Math.random());
-  const selectedQuestions = shuffled.slice(0, count).map(q => ({
+  const selected = questionsData.sort(() => 0.5 - Math.random()).slice(0, count).map(q => ({
     question: q.question,
     options: [
       { key: 'A', text: q.A },
@@ -114,65 +94,48 @@ app.post('/quiz', (req, res) => {
     ],
     answer: q.answer
   }));
-
-  req.session.questions = selectedQuestions;
+  req.session.questions = selected;
   req.session.username = name;
-
-  res.render("quiz", {
-    darkMode: true,
-    questions: selectedQuestions,
-    username: name
-  });
+  res.render("quiz", { darkMode: true, questions: selected, username: name });
 });
 
-// Submit quiz and save to MongoDB
+// Submit Quiz
 app.post('/submit', async (req, res) => {
-  const userAnswers = req.body;
-  const { username, questions } = req.session;
+  const { username, questions, userId } = req.session;
+  if (!questions) return res.redirect('/');
+
+  const answers = req.body;
   let score = 0;
-
-  if (!questions) {
-    return res.redirect('/');
-  }
-
   questions.forEach((q, i) => {
-    const userAnswer = userAnswers[`q${i}`];
-    if (userAnswer === q.answer) {
-      score++;
-    }
+    if (answers[`q${i}`] === q.answer) score++;
   });
 
-  const usedTime = parseInt(userAnswers.usedTime || 0);
+  const usedTime = parseInt(answers.usedTime || 0);
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 16);
 
-  const result = {
-    username: username || 'Guest',
-    score,
-    total: questions.length,
-    timestamp
-  };
+  await Score.create({ username: username || 'Guest', score, usedTime });
 
-  try {
-    await Score.create({
-      username: result.username,
-      score: result.score,
-      usedTime
-    });
-
-    const history = await Score.find({ username: result.username }).sort({ date: -1 }).limit(5);
-
-    res.render('result', {
-      result,
-      history,
-      darkMode: true
-    });
-  } catch (err) {
-    console.error('MongoDB save/read error:', err);
-    res.status(500).send('Error saving or reading score history.');
+  if (userId) {
+    const user = await User.findById(userId);
+    if (user && (user.maxScore === undefined || score > user.maxScore)) {
+      user.maxScore = score;
+      await user.save();
+    }
   }
+
+  const history = await Score.find({ username }).sort({ date: -1 }).limit(5);
+
+  res.render('result', {
+    result: { username, score, total: questions.length, timestamp },
+    history,
+    darkMode: true
+  });
 });
 
-// Capture undefined routes to prevent undefined errors
+// Leaderboard
+app.use('/leaderboard', leaderboardRouter);
+
+// 404
 app.use((req, res) => {
   res.status(404).send(`
     <h2>404 Not Found</h2>
@@ -181,6 +144,5 @@ app.use((req, res) => {
   `);
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
