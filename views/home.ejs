@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz App</title>
+  <link rel="stylesheet" href="/styles.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    #entry-animation {
+      position: fixed;
+      inset: 0;
+      background-color: transparent;
+      color: #333;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+    }
+
+    .main-content {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s ease;
+    }
+
+    .main-content.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
+</head>
+
+<body class="home">
+
+  <div id="entry-animation" class="animate__animated animate__bounceInDown">
+    <div style="
+      background: rgba(0, 0, 0, 0.7);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 2rem 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      text-align: center;
+    ">
+      <p style="
+        font-size: 3.2rem;
+        margin: 0;
+        color: #51ff00 !important;
+        text-shadow: 3px 3px 8px rgba(0,0,0,0.8);
+      ">🎉 Welcome to the Quiz App!</p>
+
+      <p style="
+        font-size: 1.5rem;
+        margin-top: 0.5em;
+        color: #ffd700 !important;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+      ">💡 You got this! Let's test your brain!</p>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="container">
+      <div class="title-bar">
+        <h1>🧠 Welcome to the Quiz!</h1>
+        <button id="darkToggle">🌙 Dark Mode</button>
+      </div>
+      <form action="/quiz" method="POST">
+        <h1>Select How many Questions in your Quiz</h1>
+        <select name="count">
+          <option value="10">10 Questions</option>
+          <option value="20">20 Questions</option>
+          <option value="30">30 Questions</option>
+          <option value="40">40 Questions</option>
+          <option value="50">50 Questions</option>
+        </select>
+        <button type="submit">Start Quiz 🚀</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const anim = document.getElementById("entry-animation");
+      const content = document.querySelector(".main-content");
+
+      const showMain = () => {
+        anim?.remove();
+        content.classList.add("show");
+
+        setTimeout(() => {
+          const darkToggle = document.getElementById("darkToggle");
+
+          const isDark = localStorage.getItem("darkMode") === "true";
+          if (isDark) {
+            document.body.classList.add("dark-mode");
+            if (darkToggle) darkToggle.textContent = "☀️ Light Mode";
+          }
+
+          if (darkToggle) {
+            darkToggle.addEventListener("click", () => {
+              document.body.classList.toggle("dark-mode");
+              const nowDark = document.body.classList.contains("dark-mode");
+              localStorage.setItem("darkMode", nowDark ? "true" : "false");
+              darkToggle.textContent = nowDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+            });
+          }
+        }, 50);
+      };
+
+      if (!sessionStorage.getItem("entryShown")) {
+        sessionStorage.setItem("entryShown", "true");
+        setTimeout(() => {
+          anim.classList.remove("animate__bounceInDown");
+          anim.classList.add("animate__fadeOut");
+          setTimeout(showMain, 1000); 
+        }, 2400);
+      } else {
+        showMain();
+      }
+    });
+  </script>
+
+</body>
+</html>
