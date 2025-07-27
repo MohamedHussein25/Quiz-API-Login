@@ -587,3 +587,34 @@ input[type="text"], input[type="password"], select {
 .link-btn{
   color: #007BFF;
 }
+
+/* Make logout-btn look like a regular button */
+.logout-btn {
+  background-color: var(--button-bg);
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: var(--button-hover);
+}
+
+/* Dark mode override for logout button */
+body.dark .logout-btn,
+body.dark-mode .logout-btn {
+  background-color: #000;
+  color: white;
+  border: 1px solid #ccc;
+}
+
+body.dark .logout-btn:hover,
+body.dark-mode .logout-btn:hover {
+  background-color: #222;
+}
