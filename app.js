@@ -1,9 +1,19 @@
 const express = require('express');
 const session = require('express-session');
-const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const User = require('./models/User');
+const Score = require('./models/Score');
+
+mongoose.connect('mongodb://127.0.0.1:27017/quizApp')
+  .then(() => {
+    console.log('✅ MongoDB connected');
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err);
+  });
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -13,7 +23,6 @@ app.use(session({ secret: 'quiz_secret', resave: false, saveUninitialized: true 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-const USERS_FILE = path.join(__dirname, 'users.json');
 const questionsData = require('./questions.json');
 
 // Signup route
@@ -21,39 +30,48 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 });
 
-app.post('/signup', (req, res) => {
-  const { username, password } = req.body;
-  let users = [];
-  if (fs.existsSync(USERS_FILE)) {
-    users = JSON.parse(fs.readFileSync(USERS_FILE));
+app.post('/signup', async (req, res) => {
+  const { username, password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    return res.send('Passwords do not match. <a href="/signup">Try again</a>.');
   }
-  const userExists = users.find(u => u.username === username);
-  if (userExists) {
-    return res.send('Username already exists. <a href="/signup">Try again</a>.');
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    await User.create({ username, password: hashedPassword });
+    res.redirect('/login');
+  } catch (err) {
+    res.send('Username already exists. <a href="/signup">Try another</a>.');
   }
-  const hashedPassword = bcrypt.hashSync(password, 10);
-  users.push({ username, password: hashedPassword });
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-  req.session.username = username;
-  res.redirect('/');
 });
 
 // Login route
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { error: null });
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const users = fs.existsSync(USERS_FILE) ? JSON.parse(fs.readFileSync(USERS_FILE)) : [];
-  const validUser = users.find(u => u.username === username && bcrypt.compareSync(password, u.password));
-  if (!validUser) {
-    return res.send('Invalid login. <a href="/login">Try again</a>.');
+
+  const user = await User.findOne({ username });
+  if (!user) {
+    return res.send(`
+      <script>alert('❌ User name not exist.'); window.location.href = '/login';</script>
+    `);
   }
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) {
+    return res.send(`
+      <script>alert('❌ Password incorrect.'); window.location.href = '/login';</script>
+    `);
+  }
+
   req.session.username = username;
   res.redirect('/');
 });
-
 // Logout route
 app.get('/logout', (req, res) => {
   req.session.destroy(() => {
@@ -69,7 +87,6 @@ app.use('/quiz', (req, res, next) => {
   next();
 });
 
-
 // Home page
 app.get('/', (req, res) => {
   if (!req.session.username) {
@@ -77,7 +94,6 @@ app.get('/', (req, res) => {
   }
   res.render('home', { darkMode: true });
 });
-
 
 // Start quiz
 app.post('/quiz', (req, res) => {
@@ -106,8 +122,8 @@ app.post('/quiz', (req, res) => {
   });
 });
 
-// Submit quiz
-app.post('/submit', (req, res) => {
+// Submit quiz and save to MongoDB
+app.post('/submit', async (req, res) => {
   const userAnswers = req.body;
   const { username, questions } = req.session;
   let score = 0;
@@ -123,39 +139,43 @@ app.post('/submit', (req, res) => {
     }
   });
 
-  const scoresPath = './scores.json';
+  const usedTime = parseInt(userAnswers.usedTime || 0);
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 16);
+
   const result = {
     username: username || 'Guest',
-    score: score,
+    score,
     total: questions.length,
     timestamp
   };
 
-  let scoreData = [];
   try {
-    if (fs.existsSync(scoresPath)) {
-      const raw = fs.readFileSync(scoresPath);
-      scoreData = JSON.parse(raw);
-    }
+    await Score.create({
+      username: result.username,
+      score: result.score,
+      usedTime
+    });
+
+    const history = await Score.find({ username: result.username }).sort({ date: -1 }).limit(5);
+
+    res.render('result', {
+      result,
+      history,
+      darkMode: true
+    });
   } catch (err) {
-    console.error('Read error:', err);
+    console.error('MongoDB save/read error:', err);
+    res.status(500).send('Error saving or reading score history.');
   }
+});
 
-  scoreData.push(result);
-  fs.writeFileSync(scoresPath, JSON.stringify(scoreData, null, 2));
-
-  let history = [];
-  try {
-    if (fs.existsSync(scoresPath)) {
-      const raw = fs.readFileSync(scoresPath);
-      history = JSON.parse(raw).filter(s => s.username === result.username);
-    }
-  } catch (err) {
-    console.error('History read error:', err);
-  }
-
-  res.render('result', { result, history, darkMode: true });
+// Capture undefined routes to prevent undefined errors
+app.use((req, res) => {
+  res.status(404).send(`
+    <h2>404 Not Found</h2>
+    <p>The page you're looking for doesn't exist.</p>
+    <a href="/">Return to Home</a>
+  `);
 });
 
 // Start server
