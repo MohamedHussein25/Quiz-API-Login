@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="quiz-bg-1">
+  <div class="container">
+    <h1>📝 Create Account</h1>
+    <form id="signup-form" class="form-box">
+      <input type="text" name="username" placeholder="Username" required class="input"><br>
+      <input type="password" name="password" placeholder="Password" required class="input"><br>
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required class="input"><br>
+      <div class="action-row">
+        <button type="submit" class="btn">Sign Up</button>
+        <a href="/login" class="link-btn">Login here</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("signup-form");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const body = new URLSearchParams(formData);
+
+        try {
+          const response = await fetch("/signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: body
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert("✅ Registered successfully");
+            window.location.href = "/login";
+          } else {
+            alert("❌ " + result.message);
+          }
+        } catch (err) {
+          alert("⚠️ Registration failed. Please try again.");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

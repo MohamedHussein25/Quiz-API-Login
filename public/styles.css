@@ -1,0 +1,620 @@
+:root {
+  --bg-color: #f9f9f9;
+  --text-color: #333;
+  --primary-color: #ff6f61;
+  --accent-color: #4caf50;
+  --wrong-color: #ff3d3d;
+  --right-color: #9acd32;
+  --card-bg: #ffffff;
+  --button-bg: #ff6f61;
+  --button-hover: #ff3d3d;
+}
+
+body.dark {
+  --bg-color: #1e1e1e;
+  --text-color: #f0f0f0;
+  --card-bg: #2c2c2c;
+  --button-bg: #007bff;
+  --button-hover: #0056b3;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 650px;
+  max-height: 650px;
+  margin: 50px auto;
+  padding: 15px 25px;
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  animation: floatIn 1s ease-out;
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h3 {
+  color: var(--primary-color);
+  text-align: center;
+}
+
+form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+input[type="text"], select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--primary-color);
+}
+
+button {
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  margin: 10px 5px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+}
+
+#timer {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--accent-color);
+}
+
+.question-block {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+  transition: all 0.3s ease;
+}
+
+.correct {
+  border: 2px solid var(--right-color);
+  background-color: #e8f5e9;
+}
+
+.incorrect {
+  border: 2px solid var(--wrong-color);
+  background-color: #ffebee;
+}
+
+.retake {
+  display: block;
+  text-align: center;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.retake:hover {
+  background-color: #388e3c;
+}
+
+#darkToggle {
+  float: right;
+  margin-bottom: 10px;
+  padding: 6px 12px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+}
+
+.progress-container {
+  background-color: #ddd;
+  border-radius: 20px;
+  height: 12px;
+  margin: 20px 0;
+  overflow: hidden;
+}
+#progress {
+  background-color: var(--accent-color);
+  height: 100%;
+  width: 0;
+  transition: width 0.5s ease;
+}
+
+body {
+  background: linear-gradient(-45deg, #f6d365, #fda085, #fbc2eb, #a18cd1);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+#confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+}
+
+
+/* Home page background */
+body.home {
+  background: url('/quiz-background.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Dynamic quiz background class (changes per question) */
+body.quiz-bg-1 { background-color: #f9f3d2; }
+body.quiz-bg-2 { background-color: #d2eaf9; }
+body.quiz-bg-3 { background-color: #f9d2e4; }
+body.quiz-bg-4 { background-color: #d9f9d2; }
+body.quiz-bg-5 { background-color: #f9e0d2; }
+
+
+/* 🌙 Dark Mode */
+body.dark {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* 💙 Blue Text */
+.blue-text {
+  color: #007BFF;
+}
+
+/* 📍 Center the Next Button */
+.center-button {
+  text-align: center;
+  margin-top: 1em;
+}
+
+.nextBtn {
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 8px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* 🎨 Dynamic Backgrounds */
+.bg-0 { background-color: #f2f2f2; }
+.bg-1 { background-color: #e0f7fa; }
+.bg-2 { background-color: #fce4ec; }
+.bg-3 { background-color: #fff3e0; }
+.bg-4 { background-color: #ede7f6; }
+
+/* 📊 Progress Animation */
+.progress-container {
+  width: 100%;
+  background: #ddd;
+  height: 10px;
+  margin-bottom: 1em;
+  border-radius: 5px;
+  overflow: hidden;
+}
+#progress {
+  height: 10px;
+  width: 0%;
+  background: #007BFF;
+  transition: width 0.5s ease-in-out;
+}
+
+/* 🎉 Score celebration */
+#result-block {
+  text-align: center;
+  animation: pop-in 0.8s ease-in-out;
+}
+@keyframes pop-in {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+body {
+  background-image: url('/images/quiz-bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:url('/images/quiz-bg.jpg');
+  z-index: -1;
+}
+
+
+body.quiz-bg-1 {
+  background: url('/images/bg-quiz.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+body.quiz-result {
+  background: url('/images/bg-result.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+body.home {
+  background: none !important;
+}
+
+
+/* ✅ Force question titles to appear in blue */
+.question-slide h3,
+.question-block h3 {
+  color: #007BFF !important; /* Bright blue */
+}
+
+/* ✅ Force answer option labels to appear in blue */
+.question-slide label,
+.question-block label {
+  color: #007BFF !important;
+  font-weight: 500; /* Make the text slightly bolder */
+}
+
+/* ✅ Optional: Style the Next button with blue background */
+.question-slide .nextBtn {
+  background-color: #007BFF; /* Button background blue */
+}
+
+/* ✅ Optional: Change button color on hover */
+.question-slide .nextBtn:hover {
+  background-color: #0056b3; /* Darker blue when hovered */
+}
+
+/* 🌙 Dark Mode inside title bar */
+.title-bar {
+  color: #0056b3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.title-bar h1,
+.title-bar h2 {
+  margin: 0;
+}
+
+#darkToggle {
+  padding: 6px 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#darkToggle:hover {
+  background-color: var(--button-hover);
+}
+
+/* Dark Mode - form elements */
+.dark input[type="text"],
+.dark select {
+  background-color: black;
+  color: white;
+  border: 2px solid red;
+}
+
+/* Optional: Change placeholder color too */
+.dark input::placeholder {
+  color: white;
+}
+
+/* 🌙 Dark Mode - Override question block colors */
+body.dark .question-block {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 1px solid #444;
+}
+
+body.dark .question-block h3,
+body.dark .question-block label {
+  color: #fff !important;
+}
+
+body.dark .title-bar {
+  color: white;
+}
+
+body.dark .result-container {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+body.dark .result-container h1,
+body.dark .result-container h2,
+body.dark .result-container p,
+body.dark .result-container a {
+  color: #fff !important;
+}
+.Used-time{
+  color: #007BFF;
+}
+
+body.dark .Used-time{
+  color: white;
+}
+
+.score-history-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.score-history li {
+  color: black;
+}
+
+body.dark .score-history li {
+  color: white;
+}
+/* 🌙 Dark Mode Support */
+body.dark-mode {
+  background-color: #121212;
+  color: #f5f5f5;
+}
+
+body.dark-mode .container {
+  background-color: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark-mode label {
+  background-color: #333;
+  color: #f5f5f5;
+}
+
+body.dark-mode input[type="radio"] {
+  accent-color: #90caf9;
+}
+
+/* 🌙 Strict Dark Mode */
+body.dark-mode {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+body.dark-mode .container,
+body.dark-mode .question-block,
+body.dark-mode .title-bar {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+body.dark-mode label {
+  background-color: #111 !important;
+  color: #fff !important;
+}
+
+body.dark-mode input[type="radio"] {
+  accent-color: #fff !important;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode button,
+body.dark-mode label {
+  color: #fff !important;
+}
+
+/* ✅ Answer Highlighting in Dark Mode */
+body.dark-mode label.correct {
+  color: #00ff00 !important; /* Green for correct */
+}
+
+body.dark-mode label.incorrect {
+  color: #ff4c4c !important; /* Red for incorrect */
+}
+
+
+.exitBtn, .retakeBtn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 18px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.exitBtn:hover, .retakeBtn:hover {
+  background-color: #0056b3;
+}
+
+/* 💬 Bold text for all answer options */
+label {
+  font-weight: bold;
+}
+
+/* Score history text white in dark mode */
+body.dark-mode .score-entry,
+body.dark-mode .score-entry * {
+  color: #ffffff !important;
+}
+
+
+/* Dark Mode Styling */
+body.dark-mode {
+  background-color: #121212;
+  color: white;
+}
+.dark-mode .blue-text {
+  color: #66ccff;
+}
+.dark-mode input,
+.dark-mode select,
+.dark-mode button {
+  background-color: #222;
+  color: white;
+  border: 1px solid #555;
+}
+.dark-mode .score-history li {
+  color: white;
+}
+
+
+/* Uniform button size for Dark Mode and Mute */
+#darkToggle, #muteToggle {
+  padding: 8px 16px;
+  font-size: 16px;
+  min-width: 120px;
+  text-align: center;
+  border-radius: 8px;
+  margin-left: 5px;
+}
+
+
+/* Center align result buttons */
+.result-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+.result-buttons a {
+  margin: 0 10px;
+  display: inline-block;
+}
+
+.dark-mode #darkToggle {
+  background-color: #222;
+  color: #f1f1f1;
+  border: 1px solid #555;
+}
+
+.dark-mode #darkToggle:hover {
+  background-color: #333;
+}
+
+/* 🌙 Dark Mode for Result Buttons */
+body.dark-mode .result-buttons a {
+  background-color: #222 !important;
+  color: white !important;
+  border: 1px solid #555;
+}
+
+body.dark-mode .result-buttons a:hover {
+  background-color: #333 !important;
+}
+
+input[type="text"], select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--primary-color);
+}
+
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--primary-color);
+}
+
+.dark input[type="password"] {
+  background-color: black;
+  color: white;
+  border: 2px solid red;
+}
+
+.form-box {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+input[type="text"], input[type="password"], select {
+  width: 100%;
+}
+
+.link-btn {
+  color: var(--primary-color);
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  color: var(--button-hover);
+}
+
+.link-btn{
+  color: #007BFF;
+}
+
+/* Make logout-btn look like a regular button */
+.logout-btn {
+  background-color: var(--button-bg);
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: var(--button-hover);
+}
+
+/* Dark mode override for logout button */
+body.dark .logout-btn,
+body.dark-mode .logout-btn {
+  background-color: #000;
+  color: white;
+  border: 1px solid #ccc;
+}
+
+body.dark .logout-btn:hover,
+body.dark-mode .logout-btn:hover {
+  background-color: #222;
+}

@@ -1,0 +1,30 @@
+Project 3: Quiz App
+
+In this project you and your team will be creating a quiz application using client-server architecture and using APIs. Project 3 builds on project 2, therefore try to utilize as much of your previous work as possible in order to finish the project on time. The app will have three main pages as before:
+
+1. The home page where the user will be able to start the quiz.
+2. The quiz page where the user will be able to play the 10-question quiz.
+3. The results page where the user will be able to see what they scored in the quiz.
+
+Additionally, you will need to incorporate:
+
+1. A signup/login page for the user to create an account.
+2. Save users score along with other user information into MongoDB.
+3. Create a user profile page where the user can see their play history.
+4. Create a leaderboard page where users can see the top-10 players and how they rank compared to them
+
+Additionally, you will utilize the Trivia API (free): https://opentdb.com/api_config.php for your questions, the number of questions and the question category.
+
+When finished, deploy the server in Heroku or a cloud service of your choice (usually free of charge for basic tiers).
+
+Extra features could include:
+1. A timer for the quiz or for each question.
+2. Ability to share their score in social media.
+
+Use of ChatGPT, Google, Stack Overflow are allowed, however if I were to ask on how you implemented a feature, you should possess full knowledge of the code and how it works. Otherwise, a lower grade will be given.
+
+Each group, should maintain and submit a README.md file. In this file you should include all the features you and your team have developed, how to run the server, the name of participating team members, and what each team members role was in the development of the quiz app. 
+
+You will submit the link of your leader's GitHub account and your deployment. The leader could be the same as last time, or a new leader may be chosen, dictatorially or democratically :P
+
+Extra credit will be provided for groups/individuals that go above and beyond the minimum required work.

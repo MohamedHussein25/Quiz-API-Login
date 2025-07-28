@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+
+    .leaderboard-container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .leaderboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .leaderboard-title {
+      font-size: 2em;
+      color: var(--primary-color);
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .leaderboard-table th, .leaderboard-table td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .leaderboard-table th {
+      background-color: var(--button-bg);
+      color: white;
+    }
+
+    .leaderboard-table td {
+      color: black;
+    }
+
+    body.dark-mode .leaderboard-table td {
+      color: white;
+    }
+
+    .highlight {
+      font-weight: bold;
+      background-color: #ffeb3b44;
+      border-radius: 8px;
+    }
+
+    body.dark-mode .highlight {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .back-home {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: var(--button-bg);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+
+    .back-home:hover {
+      background-color: var(--button-hover);
+    }
+
+    #darkToggle {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--button-bg);
+      color: white;
+      cursor: pointer;
+    }
+
+    #darkToggle:hover {
+      background-color: var(--button-hover);
+    }
+
+    body.dark-mode .leaderboard-container {
+        background-color: #1e1e1e;
+    }
+  </style>
+</head>
+<body class="home">
+
+  <div class="leaderboard-container">
+    <div class="leaderboard-header">
+      <div class="leaderboard-title">🏆 Quiz Leaderboard</div>
+      <button id="darkToggle">🌙 Dark Mode</button>
+    </div>
+
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Player</th>
+          <th>High Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% leaderboard.forEach(player => { %>
+          <tr class="<%= player.isCurrentUser ? 'highlight' : '' %>">
+            <td><%= player.rank %></td>
+            <td><%= player.name %></td>
+            <td><%= player.maxScore %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <div style="text-align: center;">
+      <a href="/" class="back-home">← Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const darkToggle = document.getElementById("darkToggle");
+
+      const isDark = localStorage.getItem("darkMode") === "true";
+      if (isDark) {
+        document.body.classList.add("dark-mode");
+        darkToggle.textContent = "☀️ Light Mode";
+      }
+
+      darkToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const nowDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", nowDark ? "true" : "false");
+        darkToggle.textContent = nowDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+      });
+    });
+  </script>
+</body>
+</html>

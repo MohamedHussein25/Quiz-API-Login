@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Result</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="quiz-result">
+  <div class="container">
+    <div class="title-bar">
+      <h1 class="blue-text">🎉 Well done, <%= result.username %>!</h1>
+      <button id="darkToggle">🌙 Dark Mode</button>
+<a href="/profile"><button>👤 My Profile</button></a>
+
+    </div>
+
+    <p class="blue-text">Your score: <strong><%= result.score %> / <%= result.total %></strong></p>
+    <p class="Used-time">🕒 Submitted at: <%= result.timestamp %></p>
+
+    <% if (history && history.length > 0) { %>
+      <h2 class="blue-text">📊 Score History</h2>
+      <ul class="score-history">
+        <% history.slice(-5).reverse().forEach(h => { %>
+          <li class="score-entry"><strong><%= h.timestamp %></strong> — <%= h.username %>: <%= h.score %> / <%= h.total %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <div class="result-buttons">
+      <a href="/" class="nextBtn">🔁 Retake Quiz</a>
+      <a href="/leaderboard" class="nextBtn">🏆 View Leaderboard</a>
+      <a href="/login" class="nextBtn">📄 Exit(log out)</a>
+    </div>
+  </div>
+
+  <script src="/script.js" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      setupDarkMode();
+    });
+  </script>
+</body>
+</html>

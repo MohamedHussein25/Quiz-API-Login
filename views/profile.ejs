@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      color: black;
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+
+
+    .container {
+      background-color: white;
+      padding: 40px;
+      margin: 40px auto;
+      border-radius: 16px;
+      max-width: 800px;
+      max-height: 1000px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .dark-mode .container {
+      background-color: #1e1e1e;
+    }
+
+    #darkToggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #darkToggle:hover {
+      background-color: #e95b4e;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+
+    .dark-mode th {
+      background-color: #333;
+      color: white;
+    }
+
+    .btn-home {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-home:hover {
+      background-color: #e95b4e;
+    }
+
+    .dark-mode .btn-home {
+      background-color: #ff6f61;
+      color: white;
+    }
+
+    .dark-mode .btn-home:hover {
+      background-color: #e95b4e;
+    }
+
+    #darkToggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#darkToggle:hover {
+  background-color: #e95b4e;
+}
+
+.dark-mode #darkToggle {
+  background-color: #ffffff;
+  color: #121212;
+}
+
+  </style>
+</head>
+<body class="leaderboard-bg">
+  <div class="container">
+    <!-- 🌙 DARK MODE BUTTON -->
+    <button id="darkToggle">🌙 Dark Mode</button>
+
+    <!-- 👤 USER INFO -->
+    <h1 class="title">👤 User Profile</h1>
+    <p><strong>Username:</strong> <%= username || "Guest" %></p>
+
+    <h2>Your Play History</h2>
+
+    <% if (scores && scores.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Score</th>
+            <th>Used Time</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% scores.slice(0, 10).forEach(function(score, index) { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= score.score ?? 'N/A' %></td>
+              <td><%= score.usedTime ?? 'N/A' %></td>
+              <td><%= score.date ? new Date(score.date).toLocaleString() : 'N/A' %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>No play history available.</p>
+    <% } %>
+
+    <!-- 🔘 CENTERED HOME BUTTON -->
+    <a href="/" class="btn-home">← Back to Home</a>
+  </div>
+
+<script>
+  const toggle = document.getElementById("darkToggle");
+  toggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    // Update button text/icon
+    if (document.body.classList.contains("dark-mode")) {
+      toggle.textContent = "☀️ Light Mode";
+    } else {
+      toggle.textContent = "🌙 Dark Mode";
+    }
+  });
+</script>
+</body>
+</html>
