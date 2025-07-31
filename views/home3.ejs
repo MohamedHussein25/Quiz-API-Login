@@ -1,0 +1,26 @@
+<div class="container quiz-container">
+  <h1 class="blue-text">🎯 Start Your Quiz</h1>
+  <form action="/quiz" method="POST" class="quiz-form">
+    <label for="username">🧑 Your Name:</label>
+    <input type="text" name="username" required placeholder="Enter your name" class="form-input"><br>
+
+    <label for="count">🔢 Number of Questions:</label>
+    <input type="number" name="count" min="1" max="50" value="10" class="form-input"><br>
+
+    <label for="category">📚 Select Category:</label>
+    <select name="category" class="form-input">
+      <option value="">Any Category</option>
+      <option value="9">General Knowledge</option>
+      <option value="18">Science: Computers</option>
+      <option value="23">History</option>
+      <option value="21">Sports</option>
+      <option value="17">Science & Nature</option>
+      <option value="22">Geography</option>
+      <option value="11">Film</option>
+      <option value="15">Video Games</option>
+      <option value="12">Music</option>
+    </select><br>
+
+    <button type="submit" class="btn start-btn">🚀 Start Quiz</button>
+  </form>
+</div>

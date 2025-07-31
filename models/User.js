@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true },
+  username: String,
+  email: String,
   password: String,
-  maxScore: { type: Number, default: 0 }
+  bio: String,
+  scores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Score' }]
 });
 
 module.exports = mongoose.model('User', userSchema);

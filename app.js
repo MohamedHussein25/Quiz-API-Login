@@ -1,4 +1,6 @@
-const express = require('express');
+
+const axios = require('axios');
+const express = require('express'); 
 const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -7,13 +9,15 @@ const mongoose = require('mongoose');
 const User = require('./models/User');
 const Score = require('./models/Score');
 const leaderboardRouter = require('./routes/leaderboard');
+const submitRouter = require('./routes/submit');
+const userRouter = require('./routes/user');
 const questionsData = require('./questions.json');
 
-mongoose.connect('mongodb://127.0.0.1:27017/quizApp')
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch((err) => console.error('❌ MongoDB connection error:', err));
-
 const app = express();
+
+mongoose.connect('mongodb+srv://userQuiz:Uq123456@cluster0.zgo4mqo.mongodb.net/quizAppDB?retryWrites=true&w=majority&appName=Cluster0')
+  .then(() => console.log("✅ Connected to MongoDB Atlas"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -81,22 +85,38 @@ app.get('/', (req, res) => {
 });
 
 // Start Quiz
-app.post('/quiz', (req, res) => {
+app.post('/quiz', async (req, res) => {
   const name = req.body.username || req.session.username || 'Guest';
   const count = parseInt(req.body.count) || 10;
-  const selected = questionsData.sort(() => 0.5 - Math.random()).slice(0, count).map(q => ({
-    question: q.question,
-    options: [
-      { key: 'A', text: q.A },
-      { key: 'B', text: q.B },
-      { key: 'C', text: q.C },
-      { key: 'D', text: q.D }
-    ],
-    answer: q.answer
-  }));
-  req.session.questions = selected;
-  req.session.username = name;
-  res.render("quiz", { darkMode: true, questions: selected, username: name });
+  const category = req.body.category || '';
+
+  try {
+    const url = `https://opentdb.com/api.php?amount=${count}&type=multiple${category ? `&category=${category}` : ''}`;
+    const response = await axios.get(url);
+
+    const selected = response.data.results.map((q) => {
+      const options = [...q.incorrect_answers, q.correct_answer]
+        .sort(() => 0.5 - Math.random())
+        .map((opt, i) => ({
+          key: String.fromCharCode(65 + i),
+          text: opt
+        }));
+
+      return {
+        question: q.question,
+        options,
+        answer: options.find(opt => opt.text === q.correct_answer).key
+      };
+    });
+
+    req.session.questions = selected;
+    req.session.username = name;
+
+    res.render("quiz", { darkMode: true, questions: selected, username: name });
+  } catch (err) {
+    console.error("Failed to load questions from Trivia API", err);
+    res.status(500).send("Error fetching quiz questions.");
+  }
 });
 
 // Submit Quiz

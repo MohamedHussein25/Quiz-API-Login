@@ -16,6 +16,32 @@
 
     <p class="blue-text">Your score: <strong><%= result.score %> / <%= result.total %></strong></p>
     <p class="Used-time">🕒 Submitted at: <%= result.timestamp %></p>
+      <h3>📢 Share Your Score</h3>
+
+<div class="share-buttons">
+  <a class="btn btn-facebook"
+     href="https://www.facebook.com/sharer/sharer.php?u=https://quiz-api-login.onrender.com"
+     target="_blank">Share on Facebook</a>
+
+  <a class="btn btn-twitter"
+     href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(`I scored ${result.score} / ${result.total} on the Quiz App! Play now → https://quiz-api-login.onrender.com`) %>"
+     target="_blank">Share on Twitter</a>
+
+  <a class="btn btn-whatsapp"
+     href="https://api.whatsapp.com/send?text=<%= encodeURIComponent(`I just scored ${result.score}/${result.total} on the Quiz App! 🚀 Try it: https://quiz-api-login.onrender.com`) %>"
+     target="_blank">Share on WhatsApp</a>
+
+  <button onclick="copyShareLink()">📋 Copy Score</button>
+</div>
+
+<script>
+  function copyShareLink() {
+    const text = `I scored <%= result.score %> out of <%= result.total %> on the Quiz App! 🚀`;
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Score copied to clipboard!");
+    });
+  }
+</script>
 
     <% if (history && history.length > 0) { %>
       <h2 class="blue-text">📊 Score History</h2>

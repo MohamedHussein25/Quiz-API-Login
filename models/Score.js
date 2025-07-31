@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const scoreSchema = new mongoose.Schema({
-  username: String,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   score: Number,
-  usedTime: Number,
+  total: Number,
   date: { type: Date, default: Date.now }
 });
 

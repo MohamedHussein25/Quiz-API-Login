@@ -618,3 +618,103 @@ body.dark .logout-btn:hover,
 body.dark-mode .logout-btn:hover {
   background-color: #222;
 }
+
+.quiz-container {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.quiz-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-input {
+  padding: 10px;
+  border: 2px solid #888;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.start-btn {
+  background-color: #2196f3;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.start-btn:hover {
+  background-color: #1976d2;
+}
+
+.blue-text {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.share-buttons a, .share-buttons button {
+  display: inline-block;
+  margin: 6px 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.share-buttons a:hover, .share-buttons button:hover {
+  background-color: var(--button-hover);
+}
+
+.share-buttons {
+  margin: 10px 0 20px;
+  text-align: center;
+}
+
+.share-buttons .btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 10px 10px 0;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.btn-facebook {
+  background-color: #3b5998;
+}
+
+.btn-facebook:hover {
+  background-color: #2d4373;
+}
+
+.btn-twitter {
+  background-color: #1da1f2;
+}
+
+.btn-twitter:hover {
+  background-color: #0d8ddb;
+}
+
+.btn-whatsapp {
+  background-color: #25d366;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebd5b;
+}
